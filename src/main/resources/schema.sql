@@ -1,5 +1,3 @@
-SET SCHEMA PUBLIC;
-
 create table if not exists Taco_Order (
                                           id identity not null primary key,
                                           delivery_name varchar(50) not null,
