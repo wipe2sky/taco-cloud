@@ -14,9 +14,9 @@ import org.springframework.data.relational.core.mapping.Table;
 @NoArgsConstructor(access= AccessLevel.PRIVATE, force=true)
 public class Ingredient implements Persistable<String> {
     @Id
-    private final String id;
-    private final String name;
-    private final Type type;
+    private String id;
+    private String name;
+    private Type type;
 
     @Override
     public boolean isNew() {
