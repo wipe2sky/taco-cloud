@@ -4,9 +4,9 @@ import com.sia.tacos.entity.Ingredient;
 import com.sia.tacos.entity.Ingredient.Type;
 import com.sia.tacos.entity.Taco;
 import com.sia.tacos.entity.TacoOrder;
+import com.sia.tacos.entity.TacoUDT;
 import com.sia.tacos.repository.IngredientRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -17,10 +17,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-@Slf4j
 @Controller
 @RequestMapping("/design")
 @SessionAttributes("tacoOrder")
@@ -30,10 +31,13 @@ public class DesignTacoController {
 
     @ModelAttribute
     public void addIngredientsToModel(Model model) {
-        Iterable<Ingredient> ingredients = ingredientRepository.findAll();
+        List<Ingredient> ingredients = new ArrayList<>();
+        ingredientRepository.findAll().forEach(i -> ingredients.add(i));
+
         Type[] types = Ingredient.Type.values();
         for (Type type : types) {
-            model.addAttribute(type.toString().toLowerCase(), filterByType(ingredients, type));
+            model.addAttribute(type.toString().toLowerCase(),
+                    filterByType(ingredients, type));
         }
     }
 
@@ -59,8 +63,8 @@ public class DesignTacoController {
             return "design";
         }
 
-        tacoOrder.addTaco(taco);
-        log.info("Processing taco: {}", taco);
+        tacoOrder.addTaco(new TacoUDT(taco.getName(), taco.getIngredients()));
+
         return "redirect:/orders/current";
     }
 

@@ -1,4 +1,4 @@
-package com.sia.tacos.config;
+package com.sia.tacos.configuration;
 
 import com.sia.tacos.entity.Ingredient;
 import com.sia.tacos.entity.Ingredient.Type;

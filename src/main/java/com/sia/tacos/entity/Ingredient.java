@@ -4,21 +4,19 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import org.springframework.data.cassandra.core.mapping.PrimaryKey;
+import org.springframework.data.cassandra.core.mapping.Table;
 
 @Data
-@Entity
 @AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
+@NoArgsConstructor(access=AccessLevel.PRIVATE, force=true)
+@Table("ingredients")
 public class Ingredient {
-    @Id
-    private final String id;
 
-    private final String name;
-
-    private final Type type;
+    @PrimaryKey
+    private String id;
+    private String name;
+    private Type type;
 
     public enum Type {
         WRAP,

@@ -24,13 +24,13 @@ public class OrderController {
     private final OrderRepository orderRepository;
 
     @GetMapping("/current")
-    public String orderForm(){
+    public String orderForm() {
         return "orderForm";
     }
 
     @PostMapping
-    public String processOrder(@Valid TacoOrder order, Errors errors, SessionStatus sessionStatus){
-        if (errors.hasErrors()){
+    public String processOrder(@Valid TacoOrder order, Errors errors, SessionStatus sessionStatus) {
+        if (errors.hasErrors()) {
             return "orderForm";
         }
         orderRepository.save(order);
