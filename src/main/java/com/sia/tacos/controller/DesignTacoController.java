@@ -4,7 +4,6 @@ import com.sia.tacos.entity.Ingredient;
 import com.sia.tacos.entity.Ingredient.Type;
 import com.sia.tacos.entity.Taco;
 import com.sia.tacos.entity.TacoOrder;
-import com.sia.tacos.entity.TacoUDT;
 import com.sia.tacos.repository.IngredientRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -32,7 +31,7 @@ public class DesignTacoController {
     @ModelAttribute
     public void addIngredientsToModel(Model model) {
         List<Ingredient> ingredients = new ArrayList<>();
-        ingredientRepository.findAll().forEach(i -> ingredients.add(i));
+        ingredientRepository.findAll().forEach(ingredients::add);
 
         Type[] types = Ingredient.Type.values();
         for (Type type : types) {
@@ -63,7 +62,7 @@ public class DesignTacoController {
             return "design";
         }
 
-        tacoOrder.addTaco(new TacoUDT(taco.getName(), taco.getIngredients()));
+        tacoOrder.addTaco(taco);
 
         return "redirect:/orders/current";
     }
