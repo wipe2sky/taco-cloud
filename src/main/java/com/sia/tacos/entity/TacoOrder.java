@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
@@ -27,6 +28,9 @@ public class TacoOrder implements Serializable {
     private Long id;
 
     private Date placedAt = new Date();
+
+    @ManyToOne
+    private User user;
 
     @NotBlank(message = "Delivery name is required")
     private String deliveryName;

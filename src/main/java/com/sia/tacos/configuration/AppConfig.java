@@ -27,7 +27,7 @@ public class AppConfig {
             repository.save(new Ingredient("SRCR", "Sour Cream", Type.SAUCE));
             userRepository.save(new User(
                     "user",
-                    passwordEncoder.encode("root"),
+                    passwordEncoder.encode("password"),
                     "Full Name",
                     "Street",
                     "City",
