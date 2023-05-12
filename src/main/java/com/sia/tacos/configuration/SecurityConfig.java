@@ -1,17 +1,14 @@
 package com.sia.tacos.configuration;
 
+import com.sia.tacos.repository.UserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 public class SecurityConfig {
@@ -21,20 +18,39 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    //Storage user details in memory
     @Bean
-    UserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
-        List<UserDetails> usersList = new ArrayList<>();
-        usersList.add(new User(
-                "buzz", passwordEncoder.encode("password"),
-                List.of(new SimpleGrantedAuthority("ROLE_USER"))
+    UserDetailsService userDetailsService(UserRepository userRepo) {
+        return username -> userRepo.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User '" + username + "' not found"));
+    }
 
-        ));
-        usersList.add(new User(
-                "woody", passwordEncoder.encode("password"),
-                List.of(new SimpleGrantedAuthority("ROLE_USER"))
-        ));
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        return http
+                .authorizeRequests()
+                .mvcMatchers("/design", "/orders").hasRole("USER")
+                .anyRequest().permitAll()
 
-        return new InMemoryUserDetailsManager(usersList);
+                .and()
+                .formLogin()
+                .loginPage("/login")
+
+                .and()
+                .logout()
+                .logoutSuccessUrl("/")
+
+                // Make H2-Console non-secured; for debug purposes
+                .and()
+                .csrf()
+                .ignoringAntMatchers("/h2-console/**")
+
+                // Allow pages to be loaded in frames from the same origin; needed for H2-Console
+                .and()
+                .headers()
+                .frameOptions()
+                .sameOrigin()
+
+                .and()
+                .build();
     }
 }
