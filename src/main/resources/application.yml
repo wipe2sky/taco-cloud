@@ -10,3 +10,10 @@ spring:
             clientId: <facebook client id>
             clientSecret: <facebook client secret>
             scope: email, public_profile
+logging:
+  file:
+    path: /var/logs/
+    name: /var/logs/taco-cloud.log
+  level:
+   root: INFO
+   org.springframework.security: INFO
