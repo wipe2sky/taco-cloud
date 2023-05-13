@@ -10,6 +10,11 @@ spring:
             clientId: <facebook client id>
             clientSecret: <facebook client secret>
             scope: email, public_profile
+
+taco:
+  orders:
+    pageSize: 10
+
 logging:
   file:
     path: /var/logs/
