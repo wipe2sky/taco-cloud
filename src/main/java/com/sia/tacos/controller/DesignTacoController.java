@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.validation.Valid;
 import java.security.Principal;
@@ -70,15 +72,16 @@ public class DesignTacoController {
     }
 
     @PostMapping
-    public String processTaco(@Valid Taco taco, Errors errors, @ModelAttribute TacoOrder tacoOrder) {
+    public RedirectView processTaco(@Valid Taco taco, Errors errors,
+                                    @ModelAttribute("tacoOrder") TacoOrder tacoOrder, RedirectAttributes attributes) {
         if (errors.hasErrors()) {
-            return "design";
+            return new RedirectView("design");
         }
-
         Taco saved = tacoRepo.save(taco);
         tacoOrder.addTaco(saved);
 
-        return "redirect:/orders/current";
+        attributes.addFlashAttribute("tacoOrder", tacoOrder);
+        return new RedirectView("/orders/current");
     }
 
     private Iterable<Ingredient> filterByType(Iterable<Ingredient> ingredients, Type type) {

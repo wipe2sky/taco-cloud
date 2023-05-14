@@ -53,6 +53,9 @@
             class="validationError"
             th:if="${#fields.hasErrors('ccCVV')}"
             th:errors="*{ccCVV}">CVV Error</span><br/>
+
+    <input type="hidden" th:field="*{tacos}" th:value="${tacos}"/>
+
     <input type="submit" value="Submit Order"/></form>
 </body>
 </html>

@@ -39,7 +39,7 @@ public class OrderController {
 
     @GetMapping("/current")
     public String orderForm(@AuthenticationPrincipal User user,
-                            @ModelAttribute TacoOrder order) {
+                            @ModelAttribute("tacoOrder") TacoOrder order) {
         if (order.getDeliveryName() == null) {
             order.setDeliveryName(user.getFullname());
         }
