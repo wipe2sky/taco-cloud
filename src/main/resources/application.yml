@@ -1,7 +1,4 @@
 spring:
-  datasource:
-    generate-unique-name: false
-    name: tacocloud
   security:
     oauth2:
       client:
@@ -20,5 +17,5 @@ logging:
     path: /var/logs/
     name: /var/logs/taco-cloud.log
   level:
-   root: INFO
-   org.springframework.security: INFO
+    root: INFO
+    org.springframework.security: INFO

@@ -1,0 +1,16 @@
+spring:
+  datasource:
+    generate-unique-name: false
+    name: tacocloud
+
+taco:
+  orders:
+    pageSize: 10
+
+logging:
+  file:
+    path: /var/logs/
+    name: /var/logs/taco-cloud.log
+  level:
+   root: INFO
+   org.springframework.security: INFO
