@@ -7,6 +7,9 @@ spring:
             clientId: <facebook client id>
             clientSecret: <facebook client secret>
             scope: email, public_profile
+  data:
+    rest:
+      base-path: /data-api
 
 taco:
   orders:
