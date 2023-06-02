@@ -14,18 +14,21 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Arrays;
 
+@Profile("dev")
 @Configuration
-public class AppConfig {
+public class DevelopmentConfig {
     @Bean
-    @Profile("dev")
     public CommandLineRunner dataLoader(IngredientRepository ingredientRepo, UserRepository userRepo,
                                         TacoRepository tacoRepo, PasswordEncoder passwordEncoder) {
         return args -> {
-            Ingredient flourTortilla = ingredientRepo.save(new Ingredient("FLTO", "Flour Tortilla", Ingredient.Type.WRAP));
-            Ingredient cornTortilla = ingredientRepo.save(new Ingredient("COTO", "Corn Tortilla", Ingredient.Type.WRAP));
+            Ingredient flourTortilla = ingredientRepo.save(
+                    new Ingredient("FLTO", "Flour Tortilla", Ingredient.Type.WRAP));
+            Ingredient cornTortilla = ingredientRepo.save(
+                    new Ingredient("COTO", "Corn Tortilla", Ingredient.Type.WRAP));
             Ingredient groundBeef = ingredientRepo.save(new Ingredient("GRBF", "Ground Beef", Ingredient.Type.PROTEIN));
             Ingredient carnitas = ingredientRepo.save(new Ingredient("CARN", "Carnitas", Ingredient.Type.PROTEIN));
-            Ingredient tomatoes = ingredientRepo.save(new Ingredient("TMTO", "Diced Tomatoes", Ingredient.Type.VEGGIES));
+            Ingredient tomatoes = ingredientRepo.save(
+                    new Ingredient("TMTO", "Diced Tomatoes", Ingredient.Type.VEGGIES));
             Ingredient lettuce = ingredientRepo.save(new Ingredient("LETC", "Lettuce", Ingredient.Type.VEGGIES));
             Ingredient cheddar = ingredientRepo.save(new Ingredient("CHED", "Cheddar", Ingredient.Type.CHEESE));
             Ingredient jack = ingredientRepo.save(new Ingredient("JACK", "Monterrey Jack", Ingredient.Type.CHEESE));

@@ -1,9 +1,9 @@
 package com.kurtsevich.tacos.controller;
 
-import com.kurtsevich.tacos.entity.TacoOrder;
 import com.kurtsevich.tacos.entity.Ingredient;
 import com.kurtsevich.tacos.entity.Ingredient.Type;
 import com.kurtsevich.tacos.entity.Taco;
+import com.kurtsevich.tacos.entity.TacoOrder;
 import com.kurtsevich.tacos.entity.User;
 import com.kurtsevich.tacos.repository.IngredientRepository;
 import com.kurtsevich.tacos.repository.TacoRepository;
@@ -45,7 +45,7 @@ public class DesignTacoController {
         Type[] types = Ingredient.Type.values();
         for (Type type : types) {
             model.addAttribute(type.toString().toLowerCase(),
-                    filterByType(ingredients, type));
+                               filterByType(ingredients, type));
         }
     }
 
@@ -63,7 +63,8 @@ public class DesignTacoController {
     @ModelAttribute(name = "user")
     public User user(Principal principal) {
         String username = principal.getName();
-        return userRepo.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User '" + username + "' not found"));
+        return userRepo.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User '" + username + "' not found"));
     }
 
     @GetMapping
@@ -77,7 +78,10 @@ public class DesignTacoController {
         if (errors.hasErrors()) {
             return new RedirectView("design");
         }
-        Taco saved = tacoRepo.save(taco);
+        Taco saved = tacoRepo
+                .save(taco)
+                .blockOptional()
+                .get();
         tacoOrder.addTaco(saved);
 
         attributes.addFlashAttribute("tacoOrder", tacoOrder);
