@@ -1,5 +1,5 @@
 spring:
-  datasource:
+  r2dbc:
     generate-unique-name: false
     name: tacocloud
 

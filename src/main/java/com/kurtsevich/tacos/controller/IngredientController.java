@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping(path = "/api/ingredients", consumes = "application/json")
@@ -22,19 +24,21 @@ public class IngredientController {
     private final IngredientRepository ingredientRepo;
 
     @GetMapping
-    public Iterable<Ingredient> getAll() {
+    public Flux<Ingredient> getAll() {
         return ingredientRepo.findAll();
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Ingredient create(@RequestBody Ingredient ingredient) {
-        return ingredientRepo.save(ingredient);
+    public Mono<Ingredient> create(@RequestBody Mono<Ingredient> ingredient) {
+        return ingredient.flatMap(ingredientRepo::save);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable String id) {
-        ingredientRepo.deleteById(id);
+        ingredientRepo.findBySlug(id)
+                .doOnNext(ingredientRepo::delete)
+                .subscribe();
     }
 }

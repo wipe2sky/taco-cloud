@@ -3,7 +3,7 @@ package com.kurtsevich.tacos.controller;
 import com.kurtsevich.tacos.entity.TacoOrder;
 import com.kurtsevich.tacos.repository.OrderRepository;
 import com.kurtsevich.tacos.entity.User;
-import com.kurtsevich.tacos.properties.OrderProps;
+import com.kurtsevich.tacos.property.OrderProps;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;

@@ -1,4 +1,4 @@
-package com.kurtsevich.tacos.properties;
+package com.kurtsevich.tacos.property;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

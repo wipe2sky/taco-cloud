@@ -1,23 +1,20 @@
 package com.kurtsevich.tacos.entity;
 
 import lombok.Data;
-import org.springframework.data.rest.core.annotation.RestResource;
+import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Table;
 
-import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
-@Entity
-@RestResource(rel = "tacos", path = "tacos")
+@Table
+@NoArgsConstructor
 public class Taco {
 
     @Id
@@ -28,9 +25,9 @@ public class Taco {
     @Size(min = 5, message = "Name must be at least 5 characters long")
     private String name;
 
-    private Date createdAt = new Date();
+    private Set<Long> ingredientIds = new HashSet<>();
 
-    @ManyToMany(targetEntity = Ingredient.class)
-    @NotEmpty(message = "You must choose at least 1 ingredient")
-    private List<Ingredient> ingredients = new ArrayList<>();
+    public void addIngredient(Ingredient ingredient) {
+        ingredientIds.add(ingredient.getId());
+    }
 }

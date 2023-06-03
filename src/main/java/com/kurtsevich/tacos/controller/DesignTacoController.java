@@ -39,8 +39,10 @@ public class DesignTacoController {
 
     @ModelAttribute
     public void addIngredientsToModel(Model model) {
-        List<Ingredient> ingredients = new ArrayList<>();
-        ingredientRepo.findAll().forEach(ingredients::add);
+        List<Ingredient> ingredients = new ArrayList<>(ingredientRepo
+                                                               .findAll()
+                                                               .collectList()
+                                                               .block());
 
         Type[] types = Ingredient.Type.values();
         for (Type type : types) {
@@ -63,7 +65,7 @@ public class DesignTacoController {
     @ModelAttribute(name = "user")
     public User user(Principal principal) {
         String username = principal.getName();
-        return userRepo.findByUsername(username)
+        return userRepo.findByUsername(username).blockOptional()
                 .orElseThrow(() -> new UsernameNotFoundException("User '" + username + "' not found"));
     }
 

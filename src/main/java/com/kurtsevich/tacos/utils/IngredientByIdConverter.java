@@ -8,11 +8,11 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class IngredientByIdConverter implements Converter<String, Ingredient> {
+public class IngredientByIdConverter implements Converter<Long, Ingredient> {
     private final IngredientRepository ingredientRepository;
 
     @Override
-    public Ingredient convert(String id) {
-        return ingredientRepository.findById(id).orElse(null);
+    public Ingredient convert(Long id) {
+        return ingredientRepository.findById(id).blockOptional().orElse(null);
     }
 }

@@ -12,60 +12,75 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.Arrays;
+import static com.kurtsevich.tacos.entity.Ingredient.Type;
+import static com.kurtsevich.tacos.entity.Ingredient.Type.PROTEIN;
+import static com.kurtsevich.tacos.entity.Ingredient.Type.WRAP;
 
 @Profile("dev")
 @Configuration
 public class DevelopmentConfig {
     @Bean
-    public CommandLineRunner dataLoader(IngredientRepository ingredientRepo, UserRepository userRepo,
-                                        TacoRepository tacoRepo, PasswordEncoder passwordEncoder) {
-        return args -> {
-            Ingredient flourTortilla = ingredientRepo.save(
-                    new Ingredient("FLTO", "Flour Tortilla", Ingredient.Type.WRAP));
-            Ingredient cornTortilla = ingredientRepo.save(
-                    new Ingredient("COTO", "Corn Tortilla", Ingredient.Type.WRAP));
-            Ingredient groundBeef = ingredientRepo.save(new Ingredient("GRBF", "Ground Beef", Ingredient.Type.PROTEIN));
-            Ingredient carnitas = ingredientRepo.save(new Ingredient("CARN", "Carnitas", Ingredient.Type.PROTEIN));
-            Ingredient tomatoes = ingredientRepo.save(
-                    new Ingredient("TMTO", "Diced Tomatoes", Ingredient.Type.VEGGIES));
-            Ingredient lettuce = ingredientRepo.save(new Ingredient("LETC", "Lettuce", Ingredient.Type.VEGGIES));
-            Ingredient cheddar = ingredientRepo.save(new Ingredient("CHED", "Cheddar", Ingredient.Type.CHEESE));
-            Ingredient jack = ingredientRepo.save(new Ingredient("JACK", "Monterrey Jack", Ingredient.Type.CHEESE));
-            Ingredient salsa = ingredientRepo.save(new Ingredient("SLSA", "Salsa", Ingredient.Type.SAUCE));
-            Ingredient sourCream = ingredientRepo.save(new Ingredient("SRCR", "Sour Cream", Ingredient.Type.SAUCE));
+    public CommandLineRunner dataLoader(IngredientRepository repo, UserRepository userRepo,
+                                        PasswordEncoder encoder, TacoRepository tacoRepo) {
 
-            userRepo.save(new User(
-                    "user",
-                    passwordEncoder.encode("password"),
-                    "Full Name",
-                    "Street",
-                    "City",
-                    "State",
-                    "222333",
-                    "+375666666"
-            ));
+        return new CommandLineRunner() {
+            @Override
+            public void run(String... args) throws Exception {
+                Ingredient flourTortilla = saveAnIngredient("FLTO", "Flour Tortilla", WRAP);
+                Ingredient cornTortilla = saveAnIngredient("COTO", "Corn Tortilla", WRAP);
+                Ingredient groundBeef = saveAnIngredient("GRBF", "Ground Beef", PROTEIN);
+                Ingredient carnitas = saveAnIngredient("CARN", "Carnitas", Type.PROTEIN);
+                Ingredient tomatoes = saveAnIngredient("TMTO", "Diced Tomatoes", Type.VEGGIES);
+                Ingredient lettuce = saveAnIngredient("LETC", "Lettuce", Type.VEGGIES);
+                Ingredient cheddar = saveAnIngredient("CHED", "Cheddar", Type.CHEESE);
+                Ingredient jack = saveAnIngredient("JACK", "Monterrey Jack", Type.CHEESE);
+                Ingredient salsa = saveAnIngredient("SLSA", "Salsa", Type.SAUCE);
+                Ingredient sourCream = saveAnIngredient("SRCR", "Sour Cream", Type.SAUCE);
+                Taco taco1 = new Taco();
+                taco1.setName("Carnivore");
+                taco1.addIngredient(flourTortilla);
+                taco1.addIngredient(groundBeef);
+                taco1.addIngredient(carnitas);
+                taco1.addIngredient(sourCream);
+                taco1.addIngredient(salsa);
+                taco1.addIngredient(cheddar);
+                tacoRepo.save(taco1).subscribe();
 
-            Taco taco1 = new Taco();
-            taco1.setName("Carnivore");
-            taco1.setIngredients(Arrays.asList(
-                    flourTortilla, groundBeef, carnitas,
-                    sourCream, salsa, cheddar));
-            tacoRepo.save(taco1);
+                Taco taco2 = new Taco();
+                taco2.setName("Bovine Bounty");
+                taco2.addIngredient(cornTortilla);
+                taco2.addIngredient(groundBeef);
+                taco2.addIngredient(cheddar);
+                taco2.addIngredient(jack);
+                taco2.addIngredient(sourCream);
+                tacoRepo.save(taco2).subscribe();
 
-            Taco taco2 = new Taco();
-            taco2.setName("Bovine Bounty");
-            taco2.setIngredients(Arrays.asList(
-                    cornTortilla, groundBeef, cheddar,
-                    jack, sourCream));
-            tacoRepo.save(taco2);
+                Taco taco3 = new Taco();
+                taco3.setName("Veg-Out");
+                taco3.addIngredient(flourTortilla);
+                taco3.addIngredient(cornTortilla);
+                taco3.addIngredient(tomatoes);
+                taco3.addIngredient(lettuce);
+                taco3.addIngredient(salsa);
+                tacoRepo.save(taco3).subscribe();
 
-            Taco taco3 = new Taco();
-            taco3.setName("Veg-Out");
-            taco3.setIngredients(Arrays.asList(
-                    flourTortilla, cornTortilla, tomatoes,
-                    lettuce, salsa));
-            tacoRepo.save(taco3);
+                userRepo.save(new User(
+                        "user",
+                        encoder.encode("password"),
+                        "Full Name",
+                        "Street",
+                        "City",
+                        "State",
+                        "222333",
+                        "+375666666"
+                )).subscribe();
+            }
+
+            private Ingredient saveAnIngredient(String id, String name, Type type) {
+                Ingredient ingredient = new Ingredient(id, name, type);
+                repo.save(ingredient).subscribe();
+                return ingredient;
+            }
         };
     }
 }

@@ -1,6 +1,8 @@
 package com.kurtsevich.tacos.controller;
 
+import com.kurtsevich.tacos.dto.TacoDto;
 import com.kurtsevich.tacos.entity.Taco;
+import com.kurtsevich.tacos.mapper.TacoMapper;
 import com.kurtsevich.tacos.repository.TacoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,6 +24,7 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class TacoController {
     private final TacoRepository tacoRepo;
+    private final TacoMapper tacoMapper;
 
     @GetMapping("/{id}")
     public Mono<Taco> tacoById(@PathVariable("id") Long id) {
@@ -29,11 +32,12 @@ public class TacoController {
     }
 
     @GetMapping(params = "recent")
-    public Flux<Taco> getRecentTacos() {
-        return tacoRepo.findAll().take(12);
+    public Flux<TacoDto> getRecentTacos() {
+        return tacoRepo.findAll().take(12)
+                .map(tacoMapper::toDto);
     }
 
-    @PostMapping(consumes="application/json")
+    @PostMapping(consumes = "application/json")
     @ResponseStatus(HttpStatus.CREATED)
     public Mono<Taco> postTaco(@RequestBody Mono<Taco> tacoMono) {
         return tacoRepo.saveAll(tacoMono).next();
