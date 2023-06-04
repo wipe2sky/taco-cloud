@@ -7,9 +7,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.relational.core.mapping.Table;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.ManyToOne;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
@@ -28,13 +25,9 @@ public class TacoOrder implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private Date placedAt = new Date();
-
-    @ManyToOne
-    private User user;
 
     @NotBlank(message = "Delivery name is required")
     private String deliveryName;

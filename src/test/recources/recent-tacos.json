@@ -2,15 +2,16 @@
   {
     "id": 1,
     "name": "Taco 1",
-    "createdAt": 1685653200000,
     "ingredients": [
       {
-        "id": "INGA",
+        "id": 1,
+        "slug": "INGA",
         "name": "Ingredient A",
         "type": "WRAP"
       },
       {
-        "id": "INGB",
+        "id": 2,
+        "slug": "INGB",
         "name": "Ingredient B",
         "type": "PROTEIN"
       }
@@ -19,15 +20,16 @@
   {
     "id": 2,
     "name": "Taco 2",
-    "createdAt": 1685653200000,
     "ingredients": [
       {
-        "id": "INGA",
+        "id": 1,
+        "slug": "INGA",
         "name": "Ingredient A",
         "type": "WRAP"
       },
       {
-        "id": "INGB",
+        "id": 2,
+        "slug": "INGB",
         "name": "Ingredient B",
         "type": "PROTEIN"
       }
@@ -36,15 +38,16 @@
   {
     "id": 3,
     "name": "Taco 3",
-    "createdAt": 1685653200000,
     "ingredients": [
       {
-        "id": "INGA",
+        "id": 1,
+        "slug": "INGA",
         "name": "Ingredient A",
         "type": "WRAP"
       },
       {
-        "id": "INGB",
+        "id": 2,
+        "slug": "INGB",
         "name": "Ingredient B",
         "type": "PROTEIN"
       }
@@ -53,15 +56,16 @@
   {
     "id": 4,
     "name": "Taco 4",
-    "createdAt": 1685653200000,
     "ingredients": [
       {
-        "id": "INGA",
+        "id": 1,
+        "slug": "INGA",
         "name": "Ingredient A",
         "type": "WRAP"
       },
       {
-        "id": "INGB",
+        "id": 2,
+        "slug": "INGB",
         "name": "Ingredient B",
         "type": "PROTEIN"
       }
@@ -70,15 +74,16 @@
   {
     "id": 5,
     "name": "Taco 5",
-    "createdAt": 1685653200000,
     "ingredients": [
       {
-        "id": "INGA",
+        "id": 1,
+        "slug": "INGA",
         "name": "Ingredient A",
         "type": "WRAP"
       },
       {
-        "id": "INGB",
+        "id": 2,
+        "slug": "INGB",
         "name": "Ingredient B",
         "type": "PROTEIN"
       }
@@ -87,15 +92,16 @@
   {
     "id": 6,
     "name": "Taco 6",
-    "createdAt": 1685653200000,
     "ingredients": [
       {
-        "id": "INGA",
+        "id": 1,
+        "slug": "INGA",
         "name": "Ingredient A",
         "type": "WRAP"
       },
       {
-        "id": "INGB",
+        "id": 2,
+        "slug": "INGB",
         "name": "Ingredient B",
         "type": "PROTEIN"
       }
@@ -104,15 +110,16 @@
   {
     "id": 7,
     "name": "Taco 7",
-    "createdAt": 1685653200000,
     "ingredients": [
       {
-        "id": "INGA",
+        "id": 1,
+        "slug": "INGA",
         "name": "Ingredient A",
         "type": "WRAP"
       },
       {
-        "id": "INGB",
+        "id": 2,
+        "slug": "INGB",
         "name": "Ingredient B",
         "type": "PROTEIN"
       }
@@ -121,15 +128,16 @@
   {
     "id": 8,
     "name": "Taco 8",
-    "createdAt": 1685653200000,
     "ingredients": [
       {
-        "id": "INGA",
+        "id": 1,
+        "slug": "INGA",
         "name": "Ingredient A",
         "type": "WRAP"
       },
       {
-        "id": "INGB",
+        "id": 2,
+        "slug": "INGB",
         "name": "Ingredient B",
         "type": "PROTEIN"
       }
@@ -138,15 +146,16 @@
   {
     "id": 9,
     "name": "Taco 9",
-    "createdAt": 1685653200000,
     "ingredients": [
       {
-        "id": "INGA",
+        "id": 1,
+        "slug": "INGA",
         "name": "Ingredient A",
         "type": "WRAP"
       },
       {
-        "id": "INGB",
+        "id": 2,
+        "slug": "INGB",
         "name": "Ingredient B",
         "type": "PROTEIN"
       }
@@ -155,15 +164,16 @@
   {
     "id": 10,
     "name": "Taco 10",
-    "createdAt": 1685653200000,
     "ingredients": [
       {
-        "id": "INGA",
+        "id": 1,
+        "slug": "INGA",
         "name": "Ingredient A",
         "type": "WRAP"
       },
       {
-        "id": "INGB",
+        "id": 2,
+        "slug": "INGB",
         "name": "Ingredient B",
         "type": "PROTEIN"
       }
@@ -172,15 +182,16 @@
   {
     "id": 11,
     "name": "Taco 11",
-    "createdAt": 1685653200000,
     "ingredients": [
       {
-        "id": "INGA",
+        "id": 1,
+        "slug": "INGA",
         "name": "Ingredient A",
         "type": "WRAP"
       },
       {
-        "id": "INGB",
+        "id": 2,
+        "slug": "INGB",
         "name": "Ingredient B",
         "type": "PROTEIN"
       }
@@ -189,15 +200,16 @@
   {
     "id": 12,
     "name": "Taco 12",
-    "createdAt": 1685653200000,
     "ingredients": [
       {
-        "id": "INGA",
+        "id": 1,
+        "slug": "INGA",
         "name": "Ingredient A",
         "type": "WRAP"
       },
       {
-        "id": "INGB",
+        "id": 2,
+        "slug": "INGB",
         "name": "Ingredient B",
         "type": "PROTEIN"
       }

@@ -2,30 +2,26 @@ package com.kurtsevich.tacos.configuration;
 
 import com.kurtsevich.tacos.entity.Ingredient;
 import com.kurtsevich.tacos.entity.Taco;
-import com.kurtsevich.tacos.entity.User;
 import com.kurtsevich.tacos.repository.IngredientRepository;
 import com.kurtsevich.tacos.repository.TacoRepository;
-import com.kurtsevich.tacos.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static com.kurtsevich.tacos.entity.Ingredient.Type;
 import static com.kurtsevich.tacos.entity.Ingredient.Type.PROTEIN;
 import static com.kurtsevich.tacos.entity.Ingredient.Type.WRAP;
 
-@Profile("dev")
+@Profile("!prod")
 @Configuration
 public class DevelopmentConfig {
     @Bean
-    public CommandLineRunner dataLoader(IngredientRepository repo, UserRepository userRepo,
-                                        PasswordEncoder encoder, TacoRepository tacoRepo) {
+    public CommandLineRunner dataLoader(IngredientRepository repo, TacoRepository tacoRepo) {
 
         return new CommandLineRunner() {
             @Override
-            public void run(String... args) throws Exception {
+            public void run(String... args) {
                 Ingredient flourTortilla = saveAnIngredient("FLTO", "Flour Tortilla", WRAP);
                 Ingredient cornTortilla = saveAnIngredient("COTO", "Corn Tortilla", WRAP);
                 Ingredient groundBeef = saveAnIngredient("GRBF", "Ground Beef", PROTEIN);
@@ -63,17 +59,6 @@ public class DevelopmentConfig {
                 taco3.addIngredient(lettuce);
                 taco3.addIngredient(salsa);
                 tacoRepo.save(taco3).subscribe();
-
-                userRepo.save(new User(
-                        "user",
-                        encoder.encode("password"),
-                        "Full Name",
-                        "Street",
-                        "City",
-                        "State",
-                        "222333",
-                        "+375666666"
-                )).subscribe();
             }
 
             private Ingredient saveAnIngredient(String id, String name, Type type) {

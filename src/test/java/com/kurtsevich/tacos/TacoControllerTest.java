@@ -1,12 +1,15 @@
 package com.kurtsevich.tacos;
 
 import com.kurtsevich.tacos.controller.TacoController;
+import com.kurtsevich.tacos.dto.TacoDto;
 import com.kurtsevich.tacos.entity.Ingredient;
 import com.kurtsevich.tacos.entity.Taco;
+import com.kurtsevich.tacos.mapper.TacoMapper;
 import com.kurtsevich.tacos.repository.TacoRepository;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.mockito.stubbing.Answer;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
@@ -15,11 +18,9 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.nio.charset.Charset;
-import java.sql.Date;
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -43,7 +44,9 @@ class TacoControllerTest {
         TacoRepository tacoRepo = Mockito.mock(TacoRepository.class);
         when(tacoRepo.findAll()).thenReturn(tacoFlux);
 
-        WebTestClient testClient = WebTestClient.bindToController(new TacoController(tacoRepo))
+        TacoMapper tacoMapper = createTacoMapperMock();
+
+        WebTestClient testClient = WebTestClient.bindToController(new TacoController(tacoRepo, tacoMapper))
                 .build();
 
         ClassPathResource recentResource =
@@ -67,48 +70,102 @@ class TacoControllerTest {
         //Using prepared json data for comparison
         testClient.get().uri("/api/tacos?recent").accept(MediaType.APPLICATION_JSON).exchange()
                 .expectStatus().isOk()
-                .expectBody().json(recentJson);
+                .expectBody()
+                .json(recentJson);
 
         //With a list of values
+        List<Mono<TacoDto>> monoList = Arrays.stream(tacos)
+                .limit(12)
+                .map(tacoMapper::toDto)
+                .collect(Collectors.toList());
+
+        Flux<TacoDto> fluxOfTacoDto = Flux.fromIterable(monoList)
+                .flatMap(mono -> mono)
+                .collectList()
+                .flatMapMany(Flux::fromIterable);
+
+        TacoDto[] tacosDto = fluxOfTacoDto
+                .collectList()
+                .block()
+                .toArray(TacoDto[]::new);
+
         testClient.get().uri("/api/tacos?recent").accept(MediaType.APPLICATION_JSON).exchange()
-                .expectStatus().isOk().expectBodyList(Taco.class)
-                .contains(Arrays.copyOf(tacos, 12));
+                .expectStatus().isOk()
+                .expectBodyList(TacoDto.class)
+                .contains(tacosDto);
     }
+
 
     @SuppressWarnings("unchecked")
     @Test
     void shouldSaveATaco() {
         TacoRepository tacoRepo = Mockito.mock(TacoRepository.class);
+
+        TacoMapper tacoMapper = createTacoMapperMock();
+
         WebTestClient testClient = WebTestClient
-                .bindToController(new TacoController((tacoRepo)))
+                .bindToController(new TacoController(tacoRepo, tacoMapper))
                 .build();
-        Mono<Taco> unsavedTacoMono = Mono.just(testTaco(1L));
+
+        Mono<TacoDto> unsavedTacoDtoMono = tacoMapper.toDto(testTaco(1L));
+
         Taco savedTaco = testTaco(1L);
         Flux<Taco> savedTacoMono = Flux.just(savedTaco);
+
+        TacoDto savedTacoDto = tacoMapper.toDto(savedTaco).block();
 
         when(tacoRepo.saveAll(any(Mono.class))).thenReturn(savedTacoMono);
 
         testClient.post()
                 .uri("/api/tacos")
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(unsavedTacoMono, Taco.class)
+                .body(unsavedTacoDtoMono, TacoDto.class)
                 .exchange()
                 .expectStatus().isCreated()
-                .expectBody(Taco.class)
-                .isEqualTo(savedTaco);
+                .expectBody(TacoDto.class)
+                .isEqualTo(savedTacoDto);
+    }
+
+    private TacoMapper createTacoMapperMock() {
+        TacoMapper tacoMapper = Mockito.mock(TacoMapper.class);
+        when(tacoMapper.toDto(any(Taco.class))).thenAnswer((Answer<Mono<TacoDto>>) invocation -> {
+            Taco taco = invocation.getArgument(0);
+
+            TacoDto tacoDto = new TacoDto(taco.getId(), taco.getName());
+            Ingredient ingredient1 = new Ingredient("INGA", "Ingredient A", Ingredient.Type.WRAP);
+            Ingredient ingredient2 = new Ingredient("INGB", "Ingredient B", Ingredient.Type.PROTEIN);
+            ingredient1.setId(1L);
+            ingredient2.setId(2L);
+            tacoDto.addIngredient(ingredient1);
+            tacoDto.addIngredient(ingredient2);
+            return Mono.just(tacoDto);
+        });
+
+
+        when(tacoMapper.toEntity(any(TacoDto.class)))
+                .thenAnswer((Answer<Mono<Taco>>) invocation -> {
+                    TacoDto tacoDto = invocation.getArgument(0);
+                    Taco taco = new Taco();
+                    taco.setName(tacoDto.getName());
+                    tacoDto.getIngredients().forEach(taco::addIngredient);
+                    return Mono.just(taco);
+                });
+
+        return tacoMapper;
     }
 
     private Taco testTaco(Long number) {
         Taco taco = new Taco();
         taco.setId(number != null ? number : 11111);
         taco.setName("Taco " + number);
-        taco.setCreatedAt(Date.valueOf(LocalDate.of(2023, 06, 02)));
-        List<Ingredient> ingredients = new ArrayList<>();
-        ingredients.add(
-                new Ingredient("INGA", "Ingredient A", Ingredient.Type.WRAP));
-        ingredients.add(
-                new Ingredient("INGB", "Ingredient B", Ingredient.Type.PROTEIN));
-        taco.setIngredients(ingredients);
+        Ingredient ingredient1 = new Ingredient("INGA", "Ingredient A", Ingredient.Type.WRAP);
+        Ingredient ingredient2 = new Ingredient("INGB", "Ingredient B", Ingredient.Type.PROTEIN);
+        ingredient1.setId(1L);
+        ingredient2.setId(2L);
+        taco.addIngredient(ingredient1);
+        taco.addIngredient(ingredient2);
         return taco;
     }
+
+
 }

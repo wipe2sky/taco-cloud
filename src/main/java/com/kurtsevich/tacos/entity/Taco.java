@@ -5,8 +5,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.HashSet;
@@ -18,7 +16,6 @@ import java.util.Set;
 public class Taco {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @NotNull
