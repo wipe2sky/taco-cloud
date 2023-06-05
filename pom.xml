@@ -38,6 +38,12 @@
             <scope>test</scope>
         </dependency>
 
+        <!--Security start-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        <!--Security end-->
 
         <!--Database start-->
         <dependency>
