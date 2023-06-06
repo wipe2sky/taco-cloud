@@ -12,7 +12,6 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -21,13 +20,8 @@ import java.util.Set;
 @Table
 @NoArgsConstructor
 public class TacoOrder implements Serializable {
-
-    private static final long serialVersionUID = 1L;
-
     @Id
     private Long id;
-
-    private Date placedAt = new Date();
 
     @NotBlank(message = "Delivery name is required")
     private String deliveryName;

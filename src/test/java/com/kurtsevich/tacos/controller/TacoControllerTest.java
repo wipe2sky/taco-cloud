@@ -1,6 +1,5 @@
-package com.kurtsevich.tacos;
+package com.kurtsevich.tacos.controller;
 
-import com.kurtsevich.tacos.controller.TacoController;
 import com.kurtsevich.tacos.dto.TacoDto;
 import com.kurtsevich.tacos.entity.Ingredient;
 import com.kurtsevich.tacos.entity.Taco;

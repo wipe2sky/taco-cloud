@@ -1,8 +1,7 @@
-package com.kurtsevich.tacos;
+package com.kurtsevich.tacos.repository;
 
 import com.kurtsevich.tacos.entity.Ingredient;
 import com.kurtsevich.tacos.entity.Ingredient.Type;
-import com.kurtsevich.tacos.repository.IngredientRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
